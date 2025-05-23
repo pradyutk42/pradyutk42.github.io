@@ -1,13 +1,68 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pradyut Kumar</title>
+  <link href="https://fonts.googleapis.com/css2?family=Latin+Modern+Roman&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: 'Latin Modern Roman', serif;
+      max-width: 700px;
+      margin: 3rem auto;
+      padding: 0 1rem;
+      line-height: 1.7;
+      background: #fff;
+      color: #111;
+    }
+    header, footer {
+      text-align: center;
+      font-size: 0.9rem;
+      color: #555;
+      margin-bottom: 2rem;
+    }
+    nav a {
+      margin: 0 1rem;
+      text-decoration: none;
+      color: #333;
+      font-variant: small-caps;
+    }
+    nav a:hover {
+      text-decoration: underline;
+    }
+    main h2 {
+      margin-top: 2rem;
+      font-weight: normal;
+    }
+  </style>
 </head>
 <body>
-  <h1>Hi, I’m Pradyut 👋</h1>
-  <p>Welcome to my personal site! I’m a PhD student doing cool research-y things and this is a website in making.</p>
-  <p>More pages coming soon...</p>
+  <header>
+    <h1>Pradyut Kumar</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="research.html">Research</a>
+      <a href="cv.html">CV</a>
+    </nav>
+  </header>
+
+  <main>
+    <section>
+      <h2>Welcome</h2>
+      <p>This is my little corner of the internet. I'm a PhD student interested in disease modeling, networks, and how things spread (viruses, ideas, caffeine addiction...).</p>
+    </section>
+    <section>
+      <h2>Contact</h2>
+      <p>Email: <a href="mailto:your.email@example.com">your.email@example.com</a></p>
+      <p>GitHub: <a href="https://github.com/pradyutk42">@pradyutk42</a></p>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 Pradyut Kumar — site built with clean code and caffeinated curiosity.</p>
+  </footer>
 </body>
 </html>
