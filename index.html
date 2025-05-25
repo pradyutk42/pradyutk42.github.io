@@ -6,29 +6,48 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pradyut Kumar</title>
   <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@200;400&family=Raleway:wght@300;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="dark.css">
   <style>
+    :root {
+      --bg: #F7F4F2;
+      --text: #1E1E1E;
+      --accent: #C65D3B;
+    }
+
     body {
       margin: 0;
       padding: 0;
       font-family: 'Fira Sans', sans-serif;
-      background-color: #F7F4F2;
-      color: #1E1E1E;
+      background-color: var(--bg);
+      color: var(--text);
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
     header {
       padding: 1.5rem 2rem;
       display: flex;
-      justify-content: flex-end;
-      gap: 2rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 1.5rem;
       font-weight: 200;
     }
     header a {
-      color: #1E1E1E;
+      color: var(--text);
       text-decoration: none;
       font-style: italic;
+      transition: color 0.2s ease;
     }
     header a:hover {
       text-decoration: underline;
-      color: #C65D3B;
+      color: var(--accent);
+    }
+    #toggle-theme {
+      background: none;
+      border: none;
+      font-size: 1.2rem;
+      cursor: pointer;
+      color: var(--text);
+      transition: color 0.3s ease;
     }
     main {
       max-width: 1000px;
@@ -37,7 +56,7 @@
       flex-wrap: wrap;
       align-items: flex-start;
       justify-content: center;
-      padding: 0 2rem;
+      padding: 0 1.5rem;
     }
     .portrait {
       flex: 1 1 250px;
@@ -55,10 +74,19 @@
     .icons a {
       margin: 0 0.4rem;
       display: inline-block;
+      transition: transform 0.2s ease, opacity 0.2s ease;
     }
     .icons img {
       width: 30px;
       height: 30px;
+      filter: grayscale(100%);
+    }
+    .icons a:hover {
+      transform: scale(1.15);
+      opacity: 0.85;
+    }
+    .icons a:hover img {
+      filter: grayscale(0%);
     }
     .intro {
       flex: 2 1 400px;
@@ -69,23 +97,21 @@
       font-weight: 300;
       font-size: 1.4rem;
       margin-bottom: 0.5rem;
-      color: #1E1E1E;
-      font-style: normal;
+      color: var(--text);
     }
     .intro h1 {
       font-family: 'Raleway', sans-serif;
       font-weight: 700;
       font-size: 2.5rem;
       margin: 0 0 0.5rem 0;
-      color: #C65D3B;
+      color: var(--accent);
     }
     .intro h3 {
       font-family: 'Raleway', sans-serif;
       font-weight: 300;
       font-size: 1rem;
       margin-bottom: 2rem;
-      font-style: normal;
-      color: #1E1E1E;
+      color: var(--text);
     }
     .intro p {
       font-weight: 200;
@@ -94,17 +120,39 @@
       margin-bottom: 1.2rem;
     }
     .intro a {
-      color: #C65D3B;
+      color: var(--accent);
       text-decoration: none;
+      transition: color 0.2s ease;
     }
     .intro a:hover {
       text-decoration: underline;
+      color: #a34328;
     }
     footer {
       text-align: center;
       font-size: 0.8rem;
       color: #8F898A;
       padding: 2rem;
+    }
+
+    @media (max-width: 768px) {
+      main {
+        flex-direction: column;
+        padding: 0 1rem;
+      }
+      .intro {
+        padding: 1rem 1rem 2rem 1rem;
+      }
+      .intro h1 {
+        font-size: 2rem;
+      }
+      .intro h2 {
+        font-size: 1.2rem;
+      }
+      .icons img {
+        width: 26px;
+        height: 26px;
+      }
     }
   </style>
 </head>
@@ -115,6 +163,7 @@
     <a href="research.html">Research</a>
     <a href="pradyut-kumar-cv.pdf" target="_blank">CV</a>
     <a href="blog.html">Blog</a>
+    <button id="toggle-theme" title="Toggle dark mode">🌓</button>
   </header>
 
   <main>
@@ -142,5 +191,11 @@
   <footer>
     <p>© 2025 Pradyut Kumar. Site powered by terracotta tones, bad puns and overcaffeinated neurons.</p>
   </footer>
+
+  <script>
+    document.getElementById('toggle-theme').addEventListener('click', () => {
+      document.body.classList.toggle('dark');
+    });
+  </script>
 </body>
 </html>
