@@ -4,16 +4,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" href="favicon.png" type="image/png">
   <title>Pradyut Kumar</title>
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@100;200;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@200;400&family=Raleway:wght@300;700&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
       padding: 0;
       font-family: 'Fira Sans', sans-serif;
-      background-color: #fff;
-      color: #040404;
+      background-color: #F7F4F2;
+      color: #1E1E1E;
     }
     header {
       padding: 1.5rem 2rem;
@@ -23,20 +22,20 @@
       font-weight: 200;
     }
     header a {
-      color: #040404;
+      color: #1E1E1E;
       text-decoration: none;
       font-style: italic;
     }
     header a:hover {
       text-decoration: underline;
-      color: #D29C70;
+      color: #C65D3B;
     }
     main {
       max-width: 1000px;
       margin: 4rem auto;
       display: flex;
       flex-wrap: wrap;
-      align-items: center;
+      align-items: flex-start;
       justify-content: center;
       padding: 0 2rem;
     }
@@ -44,45 +43,62 @@
       flex: 1 1 250px;
       max-width: 300px;
       padding: 1rem;
+      text-align: center;
     }
     .portrait img {
       width: 100%;
       border-radius: 6px;
+    }
+    .icons {
+      margin-top: 1rem;
+    }
+    .icons a {
+      margin: 0 0.4rem;
+      display: inline-block;
+    }
+    .icons img {
+      width: 30px;
+      height: 30px;
     }
     .intro {
       flex: 2 1 400px;
       padding: 1rem 2rem;
     }
     .intro h2 {
-      font-weight: 100;
+      font-family: 'Raleway', sans-serif;
+      font-weight: 300;
       font-size: 1.4rem;
       margin-bottom: 0.5rem;
-      color: #8F898A;
-      font-style: italic;
+      color: #1E1E1E;
+      font-style: normal;
     }
     .intro h1 {
+      font-family: 'Raleway', sans-serif;
       font-weight: 700;
       font-size: 2.5rem;
       margin: 0 0 0.5rem 0;
-      color: #572E25;
+      color: #C65D3B;
     }
     .intro h3 {
-      font-weight: 700;
+      font-family: 'Raleway', sans-serif;
+      font-weight: 300;
       font-size: 1rem;
       margin-bottom: 2rem;
-      font-style: italic;
-      text-decoration: underline;
-      text-underline-offset: 2px;
+      font-style: normal;
+      color: #1E1E1E;
     }
     .intro p {
       font-weight: 200;
       font-size: 1.1rem;
-      line-height: 1.6;
-      margin: 1rem 0;
+      line-height: 1.7;
+      margin-bottom: 1.2rem;
     }
-    .intro p.contact {
-      color: #8F898A;
-      font-style: italic;
+    .intro a {
+      color: #C65D3B;
+      text-decoration: none;
+    }
+    .intro a:hover {
+      text-decoration: underline;
     }
     footer {
       text-align: center;
@@ -104,18 +120,27 @@
   <main>
     <div class="portrait">
       <img src="portrait.jpg" alt="Portrait of Pradyut Kumar">
+      <div class="icons">
+        <a href="pradyut-kumar-cv.pdf" target="_blank"><img src="icons/icon_cv.png" alt="CV"></a>
+        <a href="mailto:pradyutkumar01@gmail.com"><img src="icons/icon_gmail.png" alt="Gmail"></a>
+        <a href="mailto:kumar790@purdue.edu"><img src="icons/icon_outlook.png" alt="Outlook"></a>
+        <a href="https://github.com/pradyutk42" target="_blank"><img src="icons/icon_github.png" alt="GitHub"></a>
+        <a href="https://www.linkedin.com/in/pradyut-kumar/" target="_blank"><img src="icons/icon_linkedin.png" alt="LinkedIn"></a>
+      </div>
     </div>
+
     <div class="intro">
       <h2>Hello there, I’m</h2>
       <h1>Pradyut Kumar.</h1>
-      <h3>a.k.a <strong>Prads</strong></h3>
-      <p>I’m a PhD student interested in disease modeling, networks, and how things spread (viruses, ideas, caffeine addiction…).</p>
-      <p class="contact">You can contact me at &lt;kumar790@purdue.edu&gt;</p>
+      <h3>but most people call me Prads</h3>
+      <p>I’m a PhD student in the <a href="https://www.bio.purdue.edu/ecology/" target="_blank">Ecology & Evolutionary Biology division at Purdue Biology</a>, where I get to think about disease spread, drug resistance, and math (on purpose!). I’m fortunate to be advised by <a href="https://www.qixinhe.net/" target="_blank">Dr. Qixin He</a> and broadly interested in using mathematical models to make sense of messy biological phenomena — from predicting disease outbreaks to designing better intervention strategies (yes, math can save lives).</p>
+      <p>Before crossing continents to Indiana, I completed a dual degree at <a href="https://www.bits-pilani.ac.in/pilani/biological-sciences/" target="_blank">BITS Pilani</a> — an M.Sc. in Biological Sciences and a B.E. in Electronics and Instrumentation Engineering.</p>
+      <p>When I’m not debugging models or defending math in rooms full of biologists, you can probably find me overthinking something I read, scribbling sketches of coffee cups, or making bad puns to be kept to myself.</p>
     </div>
   </main>
 
   <footer>
-    <p>© 2025 Pradyut Kumar. Site powered by brown tones and better ideas.</p>
+    <p>© 2025 Pradyut Kumar. Site powered by terracotta tones, bad puns and overcaffeinated neurons.</p>
   </footer>
 </body>
 </html>
