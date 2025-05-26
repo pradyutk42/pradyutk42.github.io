@@ -6,19 +6,30 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>About | Pradyut Kumar</title>
   <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@200;400;700&display=swap" rel="stylesheet" />
-  <style>
+  <link rel="stylesheet" href="dark.css">
+ <style>
     :root {
       --bg: #f7f4f2;
       --text: #1e1e1e;
       --accent: #c65d3b;
+      --card-bg: #ffffff;
     }
+    body.dark {
+      --bg: #1b1310;           /* rich coffee/brown background */
+      --text: #f2eae6;          /* soft parchment white */
+      --accent: #ff9671;        /* terracotta highlight */
+      --card-bg: #2a1b18;       /* deeper brown for cards */
+}
     body {
       margin: 0;
       padding: 0;
       font-family: 'Fira Sans', sans-serif;
+      font-size: 1.125rem;
+      font-weight: 300;
       background-color: var(--bg);
       color: var(--text);
-      line-height: 1.7;
+      line-height: 1.8;
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
     header {
       padding: 1.5rem 2rem;
@@ -35,6 +46,13 @@
     }
     header a:hover {
       text-decoration: underline;
+      color: var(--accent);
+    }
+    header button {
+      background: none;
+      border: none;
+      font-size: 1.2rem;
+      cursor: pointer;
       color: var(--accent);
     }
     main {
@@ -54,9 +72,9 @@
       margin-bottom: 1rem;
     }
     h2 {
-      font-size: 1.5rem;
-      margin-top: 2rem;
-      margin-bottom: 1rem;
+      font-size: 2rem;
+      margin-top: 2.5rem;
+      margin-bottom: 1.2rem;
       border-top: 1px solid #ddd;
       padding-top: 1rem;
     }
@@ -81,6 +99,9 @@
       align-items: center;
       gap: 0.75rem;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .dark .artist-card {
+      background: #2b2b2b;
     }
     .artist-card:hover {
       transform: translateY(-4px);
@@ -135,11 +156,15 @@
     a:hover {
       text-decoration: underline;
     }
-    @media (max-width: 768px) {
-      .artist-card {
-        flex-direction: column;
-        align-items: flex-start;
-      }
+    .artist-card {
+      padding: 1rem;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background: #fff;
+      transition: background 0.2s ease;
+    }
+  .dark .artist-card {
+      background: #2c2c2c;
     }
   </style>
 </head>
@@ -150,30 +175,16 @@
     <a href="research.html">Research</a>
     <a href="pradyut-kumar-cv.pdf" target="_blank">CV</a>
     <a href="blog.html">Blog</a>
+    <button id="toggle-theme" title="Toggle dark mode">🌓</button>
   </header>
 
   <main>
     <section>
       <h1>Why I Do What I Do</h1>
       <p>You know that scene in <em>Avengers: Infinity War</em> where <a href="https://www.youtube.com/watch?v=ZCPN9SfdH7c" target="_blank">Doctor Strange scrolls through 14,000,605 futures</a> to find the one where the Avengers win? That’s kind of how I see mathematical modeling — a tool to peek into countless possible outcomes and pick the best response.</p>
+      <p>Here’s a small tool I built to help you visualize how infections spread. Feel free to play around with the sliders and explore how changes in parameters affect the epidemic curve!</p>
       <iframe src="https://pradyutk42.github.io/seir-simulator/" title="SEIR Simulator"></iframe>
-      <p>That kind of predictive power is what excites me: whether it’s understanding how a disease will spread, which intervention might work best, or how resistance to drugs evolves over time. And the beauty is, these tools aren’t just for biology — they show up in sports predictions, economic forecasting, and even your Spotify recommendations.</p>
-    </section>
-
-    <section>
-      <h2>Academic Background</h2>
-      <div class="timeline">
-        <div class="entry">
-          <time>2024 – Present</time>
-          <img src="images/msg2.avif" alt="MSG² Lab Logo">
-          <div class="desc">PhD student in the Modelling and Simulation of Genetics and Geography (MSG²) group, Department of Biology, Purdue University.<br />Advisor: Dr. Qixin He</div>
-        </div>
-        <div class="entry">
-          <time>2019 – 2024</time>
-          <img src="images/tee.png" alt="TEE Lab Logo">
-          <div class="desc">Dual-degree graduate from BITS Pilani:<br />• M.Sc. in Biological Sciences<br />• B.E. in Electronics and Instrumentation Engineering<br />My master’s thesis — advised by <a href="https://ces.iisc.ac.in/?q=user/36" target="_blank">Prof. Vishwesha Guttal</a> — was conducted at the <a href="https://teelabiisc.wordpress.com/" target="_blank">Theoretical Ecology and Evolution (TEE) lab</a> at IISc Bangalore. I focused on quantifying large-scale fish school movement using imaging and modeling tools.</div>
-        </div>
-      </div>
+      <p>That kind of predictive power is what excites me: whether it’s understanding how a disease will spread, which intervention might work best, or how resistance to drugs evolves over time.</p>
     </section>
 
     <section>
@@ -182,89 +193,64 @@
       <p>Right now, I’m working on modeling disease dynamics and trying to build tools that help in strategic planning — from vaccine rollouts to anticipating outbreaks. The goal? Predict better, prepare better.</p>
     </section>
 
+
+    <section>
+      <h2>Academic Background</h2>
+      <div style="display: flex; flex-direction: column; gap: 2rem;">
+        <div style="display: grid; grid-template-columns: 100px 1fr; gap: 1rem; background: var(--card-bg); box-shadow: 0 4px 12px rgba(0,0,0,0.05); padding: 1.5rem; border-radius: 8px;">
+          <div style="text-align: center;">
+            <div style="width: 12px; height: 12px; background: var(--accent); border-radius: 50%; margin: 0 auto 0.5rem;"></div>
+            <p style="font-weight: 700; color: var(--accent);">2024 – Present</p>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
+            <div>
+              <p>PhD student in the Modelling and Simulation of Genetics and Geography (MSG²) group, Department of Biology, Purdue University.<br />Advisor: Dr. Qixin He</p>
+            </div>
+            <div style="display: flex; gap: 1rem; margin-left: auto;">
+              <img src="images/msg2.avif" alt="MSG² Lab Logo" style="height: 60px;" />
+              <img src="images/eeb_logo_transparent.png" alt="EEB Logo" style="height: 60px;" />
+              <img src="images/BioSci_V-Full-RGB-2.png" alt="Purdue Biology Logo" style="height: 60px;" />
+            </div>
+          </div>
+        </div>
+    
+        <div style="display: grid; grid-template-columns: 100px 1fr; gap: 1rem; background: var(--card-bg); box-shadow: 0 4px 12px rgba(0,0,0,0.05); padding: 1.5rem; border-radius: 8px;">
+          <div style="text-align: center;">
+            <div style="width: 12px; height: 12px; background: var(--accent); border-radius: 50%; margin: 0 auto 0.5rem;"></div>
+            <p style="font-weight: 700; color: var(--accent);">2019 – 2024</p>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
+            <div>
+              <p>Dual-degree graduate from BITS Pilani:<br />
+                • M.Sc. in Biological Sciences<br />
+                • B.E. in Electronics and Instrumentation Engineering<br />
+                My master’s thesis — advised by <a href="https://ces.iisc.ac.in/?q=user/36" target="_blank">Prof. Vishwesha Guttal</a> — was conducted at the
+                <a href="https://teelabiisc.wordpress.com/" target="_blank">Theoretical Ecology and Evolution (TEE) lab</a> at IISc Bangalore. I focused on quantifying large-scale fish school movement using imaging and modeling tools.
+              </p>
+            </div>
+            <div style="display: flex; gap: 1rem; margin-left: auto;">
+              <img src="images/tee.png" alt="TEE Lab Logo" style="height: 60px;" />
+              <img src="images/iisc_logo_transparent.png" alt="IISc Logo" style="height: 60px;" />
+              <img src="images/BITS_Pilani-Logo.svg" alt="BITS Logo" style="height: 60px;" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section>
       <h2>Beyond the Equations</h2>
-      <ul class="styled-list">
+      <ul>
         <li>Desi hip hop and musical theatre fan — a mix of beats and ballads.</li>
         <li>Emotionally invested in Liverpool FC and the Indian cricket team — even when it hurts.</li>
         <li>I moonlight as a quizzer and quiz-master. Want to try your luck? You can find some of my slide decks here.</li>
       </ul>
+
       <div class="spotify-artists">
         <h3>Here’s what I’m listening to nowadays:</h3>
-        <div class="artist-grid">
-          <div class="artist-card">
-            <img src="https://i.scdn.co/image/ab6761610000e5eb8b64efc1e5b16d4dcae6fb37" alt="Seedhe Maut" />
-            <div class="artist-info">
-              <a href="https://open.spotify.com/artist/0Y2ZdatXX9aIYVvJ6TxN6r" target="_blank">Seedhe Maut</a>
-              <span>Sharp bars, Delhi-based rap duo</span>
-            </div>
-          </div>
-          <div class="artist-card">
-            <img src="https://i.scdn.co/image/ab6761610000e5eb59b3d7c5b0f3f7f3d3945b7e" alt="KR$NA" />
-            <div class="artist-info">
-              <a href="https://open.spotify.com/artist/4kYSro6naA4h99UJvo89HB" target="_blank">KR$NA</a>
-              <span>Hard-hitting Hindi/English lyricism</span>
-            </div>
-          </div>
-          <div class="artist-card">
-            <img src="https://i.scdn.co/image/ab6761610000e5ebfbf14fffd57b5e36f25df57f" alt="Spectra" />
-            <div class="artist-info">
-              <a href="https://open.spotify.com/artist/0B2ua5TuWYjQy3TGsDJZp3" target="_blank">Spectra Music</a>
-              <span>Flow-forward delivery, genre-blending</span>
-            </div>
-          </div>
-          <div class="artist-card">
-            <img src="https://i.scdn.co/image/ab6761610000e5ebac82d019b46b5e694ede99f1" alt="Lin-Manuel Miranda" />
-            <div class="artist-info">
-              <a href="https://open.spotify.com/artist/3C9HuiVxNw3YHzY2KcDPKJ" target="_blank">Lin-Manuel Miranda</a>
-              <span>Broadway genius behind Hamilton</span>
-            </div>
-          </div>
-          <div class="artist-card">
-            <img src="https://i.scdn.co/image/ab6761610000e5eb9dc4e3627cbb663bc8e9373a" alt="Raftaar" />
-            <div class="artist-info">
-              <a href="https://open.spotify.com/artist/5G9kmDLg3OeUyj8KVBLzbu" target="_blank">Raftaar</a>
-              <span>Versatile lyricist with commercial grit</span>
-            </div>
-          </div>
-          <div class="artist-card">
-            <img src="https://i.scdn.co/image/ab6761610000e5eb13e18000c4c34069cc58b237" alt="Prabh Deep" />
-            <div class="artist-info">
-              <a href="https://open.spotify.com/artist/4DAcJXcjX0zlQAZAPAx4Z5" target="_blank">Prabh Deep</a>
-              <span>Atmospheric beats, conscious rhymes</span>
-            </div>
-          </div>
-          <div class="artist-card">
-            <img src="https://i.scdn.co/image/ab6761610000e5eb6c4ffb57c22b29dc9284bce1" alt="Reble" />
-            <div class="artist-info">
-              <a href="https://open.spotify.com/artist/1K21Q57Lf5eNVP6KDk9wGr" target="_blank">Reble</a>
-              <span>Melancholic melodies, Indian alt-pop</span>
-            </div>
-          </div>
-          <div class="artist-card">
-            <img src="https://i.scdn.co/image/ab6761610000e5eb189f588189313bf15b9021c6" alt="Chaar Diwaari" />
-            <div class="artist-info">
-              <a href="https://open.spotify.com/artist/2zjODWzF6peR9hbxG1IXYI" target="_blank">Chaar Diwaari</a>
-              <span>Ambient desi rap with intimate lyrics</span>
-            </div>
-          </div>
-          <div class="artist-card">
-            <img src="https://i.scdn.co/image/ab6761610000e5eb3334b95f6e47b2263699df71" alt="Doechii" />
-            <div class="artist-info">
-              <a href="https://open.spotify.com/artist/4EnEZVjo3w1cwcQYePccay" target="_blank">Doechii</a>
-              <span>Bold Southern US rap & experimental pop</span>
-            </div>
-          </div>
-          <div class="artist-card">
-            <img src="https://i.scdn.co/image/ab6761610000e5eb7df7e8bb8e2efb6d1fdde8de" alt="Rawal" />
-            <div class="artist-info">
-              <a href="https://open.spotify.com/artist/0eKbCGfIXcPvrs9RCEvYId" target="_blank">Rawal</a>
-              <span>Raw energy, seamless Hindi flow</span>
-            </div>
-          </div>
-        </div>
+        <div class="artist-grid" id="artist-grid"></div>
         <div class="view-all">
-          <a href="https://open.spotify.com/user/pradyutk42" target="_blank">View All on Spotify</a>
+          <a href="#" id="toggle-more">Show more artists</a>
         </div>
       </div>
     </section>
@@ -273,5 +259,54 @@
   <footer>
     <p>© 2025 Pradyut Kumar. Thanks for scrolling all the way down — you deserve a cookie 🍪</p>
   </footer>
+
+  <script>
+    // Toggle dark mode
+    const themeToggle = document.getElementById('toggle-theme');
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark');
+    });
+
+    // Spotify artist grid
+    const toggleMore = document.getElementById('toggle-more');
+    const grid = document.getElementById('artist-grid');
+    let expanded = false;
+
+    const artists = [
+      { name: "Seedhe Maut", link: "https://open.spotify.com/artist/2oBG74gAocPMFv6Ij9ykdo?si=g7S0qBBORJ-NuMz3URw8Uw", desc: "Sharp bars, Delhi-based rap duo" },
+      { name: "KR$NA", link: "https://open.spotify.com/artist/5C1S9XwxMuuCciutwMhp5t?si=GhY21vLzT5CrnVDqCXlXuA", desc: "Hard-hitting Hindi/English lyricism" },
+      { name: "Spectra", link: "https://open.spotify.com/artist/6kQXMHA8JGJQsRsMBqqe7l?si=Y8r_7r4pR6uGMKe3FaakrQ", desc: "Flow-forward delivery, genre-blending" },
+      { name: "Lin-Manuel Miranda", link: "https://open.spotify.com/artist/4aXXDj9aZnlshx7mzj3W1N?si=yqfjhxacStiF1qh_wOtmvQ", desc: "Broadway genius behind Hamilton" },
+      { name: "Raftaar", link: "https://open.spotify.com/artist/5UdFr0GeO7jKIaNIJgwB36?si=sMyndaq3Suuca7BrrJ6oMw", desc: "Versatile lyricist with commercial grit" },
+      { name: "Prabh Deep", link: "https://open.spotify.com/artist/7suHsCqUEifucqVyWaljgC?si=6hxCgbEYT6KxeFuA7uGwkw", desc: "Atmospheric beats, conscious rhymes" },
+      { name: "Reble", link: "https://open.spotify.com/artist/3MsxNLVtDVGxjEaxgKAoi0?si=kXDE0ZoZQuWAFM1A4cpeZw", desc: "Melancholic melodies, Indian alt-pop" },
+      { name: "Chaar Diwaari", link: "https://open.spotify.com/artist/2n4q8jLM4WLwlva1sZ2WRx?si=-HJWEID_QCKJeUnN9W40yw", desc: "Ambient desi rap with intimate lyrics" },
+      { name: "Doechii", link: "https://open.spotify.com/artist/4E2rKHVDssGJm2SCDOMMJB?si=Nfv4IjRMQrq6IXZvuoi0zw", desc: "Bold Southern US rap & experimental pop" },
+      { name: "Rawal", link: "https://open.spotify.com/artist/3XbsFoxsYfrJyo9VZrbM16?si=-8px-T25Rx68nZmbNpTxgw", desc: "Raw energy, seamless Hindi flow" }
+    ];
+
+    function renderArtists(showAll = false) {
+      grid.innerHTML = '';
+      const visible = showAll ? artists : artists.slice(0, 4);
+      visible.forEach(artist => {
+        const card = document.createElement('div');
+        card.className = 'artist-card';
+        card.innerHTML = `
+          <div class="artist-info">
+          <a href="${artist.link}" target="_blank">${artist.name}</a>
+          <span>${artist.desc}</span>
+          </div>`;
+        grid.appendChild(card);
+      });
+    }
+    renderArtists();
+
+    toggleMore.addEventListener('click', (e) => {
+      e.preventDefault();
+      expanded = !expanded;
+      renderArtists(expanded);
+      toggleMore.textContent = expanded ? 'Show fewer artists' : 'Show more artists';
+    });
+  </script>
 </body>
 </html>
