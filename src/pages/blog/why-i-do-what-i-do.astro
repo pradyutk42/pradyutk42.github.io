@@ -1,0 +1,43 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import SEIRSimulator from "../../components/SEIRSimulator.astro";
+
+const published = "2026-03-18";
+---
+
+<BaseLayout current="blog" title="Why I do what I do · Pradyut Kumar">
+  <article>
+    <h1>Why I do what I do</h1>
+
+    <p class="article-meta">
+      <time datetime={published}>March 18, 2026</time> · 4 min read
+    </p>
+
+    <p>
+      You know that scene in <em>Avengers: Infinity War</em> where Doctor Strange scrolls
+      through 14,000,605 possible futures to find the one where the Avengers win? That's
+      roughly how I think about mathematical modelling — a tool for peeking at countless
+      possible outcomes and picking the best response before you commit to one in real life.
+    </p>
+
+    <p>
+      Below is a small SEIR simulator you can poke at. Drag the sliders to see how the shape
+      of an outbreak changes when R<sub>0</sub> goes up, when people are infectious for longer,
+      or when the latent period stretches. It's a toy — the real models I work with have a
+      few more moving parts — but it captures the intuition.
+    </p>
+
+    <SEIRSimulator />
+
+    <p>
+      That kind of predictive power is what excites me: whether it's understanding how a
+      disease will spread, which intervention might work best, or how resistance to drugs
+      evolves over time. The rest of my research is basically variations on this theme,
+      with more realism and more caveats.
+    </p>
+
+    <p style="margin-top:2.5rem;">
+      <a href="/blog">← back to posts</a>
+    </p>
+  </article>
+</BaseLayout>

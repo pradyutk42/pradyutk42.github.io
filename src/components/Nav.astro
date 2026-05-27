@@ -1,0 +1,58 @@
+---
+interface Props {
+  current?: string;
+}
+const { current = "" } = Astro.props;
+
+const items = [
+  { href: "/",          label: "Home",     key: "home" },
+  { href: "/about",     label: "About",    key: "about" },
+  { href: "/research",  label: "Research", key: "research" },
+  { href: "/cv",        label: "CV",       key: "cv" },
+  { href: "/blog",      label: "Blog",     key: "blog" },
+];
+---
+
+<header class="site-header">
+  <nav class="nav" aria-label="Primary">
+    {items.map(item => (
+      <a
+        href={item.href}
+        aria-current={current === item.key ? "page" : undefined}
+      >{item.label}</a>
+    ))}
+    <button
+      class="theme-toggle"
+      type="button"
+      aria-label="Toggle colour scheme"
+      data-theme-toggle
+    >dark</button>
+  </nav>
+</header>
+
+<script is:inline>
+  // Persisted theme toggle. Runs after DOM ready — theme itself is applied
+  // pre-paint from BaseLayout to avoid a flash.
+  (function () {
+    const btn = document.querySelector('[data-theme-toggle]');
+    if (!btn) return;
+
+    function currentTheme() {
+      return document.documentElement.dataset.theme
+        || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    }
+
+    function label() {
+      btn.textContent = currentTheme() === 'dark' ? 'light' : 'dark';
+    }
+
+    label();
+
+    btn.addEventListener('click', () => {
+      const next = currentTheme() === 'dark' ? 'light' : 'dark';
+      document.documentElement.dataset.theme = next;
+      try { localStorage.setItem('theme', next); } catch {}
+      label();
+    });
+  })();
+</script>

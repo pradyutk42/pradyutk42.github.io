@@ -1,0 +1,2 @@
+# Put static assets here: portrait.jpg, cv.pdf, favicon.svg, etc.
+# Files in /public are served from the site root (e.g. /public/portrait.jpg → /portrait.jpg).
