@@ -140,8 +140,11 @@ img, svg { max-width: 100%; height: auto; display: block; }
 }
 
 @media (max-width: 720px) {
-  .tex-art { background-size: 420px auto; background-position: 50% 140px; }
-  .tex-glow { height: 440px; }
+  /* The diagram reads as clutter jammed next to the portrait once the
+     hero drops to one column — off entirely below that width. The top
+     wash stays, just smaller/fainter. */
+  .tex-art { display: none; }
+  .tex-glow { height: 320px; opacity: 0.7; }
 }
 
 
@@ -245,14 +248,23 @@ pre code { background: transparent; padding: 0; }
   max-width: var(--measure);
   margin: 0 auto;
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: baseline;
-  gap: 1.75rem;
+  gap: 0.5rem 1.75rem;
   font-size: 0.85rem;
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: var(--text-muted);
+}
+
+@media (max-width: 480px) {
+  .nav {
+    gap: 0.5rem 1rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+  }
 }
 
 .nav a {
