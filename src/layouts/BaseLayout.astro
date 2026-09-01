@@ -24,12 +24,12 @@ const {
     <meta name="description" content={description} />
     <title>{title}</title>
 
-    <!-- Typography: one typeface, Newsreader (variable). -->
+    <!-- Typography: one typeface, Public Sans (Graphite). -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap"
     />
 
     <!-- Pre-paint theme selection to avoid flash. -->
@@ -45,6 +45,10 @@ const {
     </script>
   </head>
   <body>
+    <div class="site-texture" aria-hidden="true">
+      <div class="tex-glow"></div>
+      <div class="tex-art"></div>
+    </div>
     <Nav current={current} />
     <main class="container page">
       <slot />
