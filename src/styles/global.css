@@ -1,0 +1,464 @@
+/* =============================================================
+   Design tokens
+   One typeface, restrained palette, locked grid.
+   ============================================================= */
+
+:root {
+  /* palette — light (terracotta on warm cream) */
+  --bg:         #f5f1ea;
+  --surface:    #ece5d7;
+  --text:       #2a2521;
+  --text-muted: #8a807a;
+  --accent:     #b85a42;  /* terracotta — links only */
+  --border:     #dcd4c6;
+
+  /* typography */
+  --font-serif: "Newsreader", "Source Serif 4", "Iowan Old Style",
+                "Apple Garamond", Georgia, "Times New Roman", serif;
+  --font-mono:  ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  /* scale */
+  --fs-base: 1.0625rem;   /* 17px */
+  --fs-small: 0.875rem;
+  --fs-h1: 2.25rem;
+  --fs-h2: 1.5rem;
+  --fs-h3: 1.125rem;
+  --lh-body: 1.65;
+  --lh-tight: 1.25;
+
+  /* grid */
+  --measure: 42rem;         /* ~672px — one controlled column */
+  --gutter: 1.5rem;
+
+  /* motion */
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg:         #1c1915;
+    --surface:    #262220;
+    --text:       #e8e1d5;
+    --text-muted: #938a80;
+    --accent:     #d27a63;
+    --border:     #332e28;
+  }
+}
+
+/* Allow an explicit theme override via <html data-theme="light|dark">. */
+html[data-theme="light"] {
+  --bg: #f5f1ea; --surface: #ece5d7; --text: #2a2521;
+  --text-muted: #8a807a; --accent: #b85a42; --border: #dcd4c6;
+}
+html[data-theme="dark"] {
+  --bg: #1c1915; --surface: #262220; --text: #e8e1d5;
+  --text-muted: #938a80; --accent: #d27a63; --border: #332e28;
+}
+
+/* =============================================================
+   Reset + base
+   ============================================================= */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-serif);
+  font-size: var(--fs-base);
+  line-height: var(--lh-body);
+  font-feature-settings: "kern", "liga", "onum";  /* old-style numerals */
+  font-variant-numeric: oldstyle-nums;
+  transition: background-color 200ms var(--ease), color 200ms var(--ease);
+}
+
+img, svg { max-width: 100%; height: auto; display: block; }
+
+/* =============================================================
+   Layout
+   Centered column, consistent across every page.
+   ============================================================= */
+
+.container {
+  max-width: var(--measure);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+.page {
+  padding-top: 3rem;
+  padding-bottom: 6rem;
+  min-height: calc(100vh - 8rem);
+}
+
+/* =============================================================
+   Typography
+   All headings share the same family, vary only in weight/size.
+   ============================================================= */
+
+h1, h2, h3, h4 {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  line-height: var(--lh-tight);
+  letter-spacing: -0.01em;
+  color: var(--text);
+  margin: 2rem 0 0.75rem;
+}
+
+h1 { font-size: var(--fs-h1); margin-top: 0; }
+h2 { font-size: var(--fs-h2); margin-top: 2.5rem; }
+h3 { font-size: var(--fs-h3); }
+
+p { margin: 0 0 1.1em; }
+
+em, i { font-style: italic; }
+strong, b { font-weight: 600; }
+
+a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-thickness: 0.06em;
+  text-underline-offset: 0.18em;
+  text-decoration-color: color-mix(in oklab, var(--accent) 40%, transparent);
+  transition: text-decoration-color 150ms var(--ease);
+}
+a:hover {
+  text-decoration-color: var(--accent);
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid var(--border);
+  margin: 3rem 0;
+}
+
+blockquote {
+  margin: 1.5rem 0;
+  padding-left: 1.25rem;
+  border-left: 2px solid var(--border);
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+code {
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+  background: var(--surface);
+  padding: 0.1em 0.35em;
+  border-radius: 3px;
+}
+
+pre {
+  background: var(--surface);
+  padding: 1rem 1.25rem;
+  border-radius: 4px;
+  overflow-x: auto;
+  font-size: 0.9em;
+  line-height: 1.55;
+}
+pre code { background: transparent; padding: 0; }
+
+/* =============================================================
+   Nav
+   ============================================================= */
+
+.site-header {
+  padding: 2rem var(--gutter) 0;
+}
+
+.nav {
+  max-width: var(--measure);
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 1.75rem;
+  font-style: italic;
+  font-size: 1rem;
+  color: var(--text-muted);
+}
+
+.nav a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 150ms var(--ease);
+}
+.nav a:hover,
+.nav a[aria-current="page"] {
+  color: var(--text);
+}
+
+.theme-toggle {
+  margin-left: auto;
+  background: none;
+  border: 0;
+  padding: 0.25rem 0.5rem;
+  color: var(--text-muted);
+  font-style: italic;
+  font-family: inherit;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+.theme-toggle:hover { color: var(--text); }
+
+/* =============================================================
+   Footer
+   ============================================================= */
+
+.site-footer {
+  max-width: var(--measure);
+  margin: 4rem auto 2rem;
+  padding: 1.5rem var(--gutter) 0;
+  border-top: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: var(--fs-small);
+  text-align: center;
+}
+
+/* =============================================================
+   Home page specifics
+   ============================================================= */
+
+.hero {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+@media (max-width: 620px) {
+  .hero {
+    grid-template-columns: 1fr;
+  }
+}
+
+.hero-portrait {
+  width: 180px;
+  height: 220px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  font-size: var(--fs-small);
+  font-style: italic;
+  overflow: hidden;
+}
+
+.hero-portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero-name {
+  font-size: 2.5rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin: 0.3em 0 0.1em;
+  color: var(--accent);  /* the ONE place terracotta is used on a heading */
+}
+
+.hero-kicker {
+  color: var(--text-muted);
+  margin: 0 0 1.5rem;
+}
+
+.hero-links {
+  margin-top: 1.25rem;
+  font-size: var(--fs-small);
+  color: var(--text-muted);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 1rem;
+}
+
+.hero-links a {
+  color: var(--text-muted);
+}
+.hero-links a:hover { color: var(--accent); }
+
+.hero-links .sep { color: var(--border); }
+
+/* =============================================================
+   Article / blog
+   ============================================================= */
+
+.article-meta {
+  color: var(--text-muted);
+  font-size: var(--fs-small);
+  margin-bottom: 2rem;
+}
+
+.post-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.post-list li {
+  padding: 1rem 0;
+  border-top: 1px solid var(--border);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1rem;
+  align-items: baseline;
+}
+.post-list li:last-child { border-bottom: 1px solid var(--border); }
+
+.post-list a {
+  color: var(--text);
+  text-decoration: none;
+}
+.post-list a:hover { color: var(--accent); }
+
+.post-list time {
+  color: var(--text-muted);
+  font-size: var(--fs-small);
+  white-space: nowrap;
+}
+
+/* =============================================================
+   Research page
+   ============================================================= */
+
+.project {
+  padding: 1.25rem 0;
+  border-top: 1px solid var(--border);
+}
+.project:last-child { border-bottom: 1px solid var(--border); }
+
+.project h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.125rem;
+}
+
+.project p {
+  margin: 0;
+  color: var(--text);
+}
+
+.project .tags {
+  margin-top: 0.5rem;
+  font-size: var(--fs-small);
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.project-status {
+  font-size: var(--fs-small);
+  font-weight: 400;
+  font-style: italic;
+  color: var(--text-muted);
+  margin-left: 0.6rem;
+  vertical-align: middle;
+}
+
+/* =============================================================
+   Overview landing page sections
+   ============================================================= */
+
+.overview-section {
+  margin-top: 3.5rem;
+}
+
+.section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.4rem;
+  margin-bottom: 1.25rem;
+}
+
+.section-head h2 {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+  font-style: italic;
+  letter-spacing: 0;
+  color: var(--text-muted);
+}
+
+.section-link {
+  font-size: var(--fs-small);
+  font-style: italic;
+  color: var(--text-muted);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.section-link:hover { color: var(--accent); }
+
+.section-intro {
+  font-size: 1.15rem;
+  line-height: 1.5;
+  color: var(--text);
+  margin: 0 0 1.75rem;
+}
+
+/* Research themes (summaries) */
+.theme-list {
+  display: grid;
+  gap: 1.75rem;
+}
+
+.theme h3 {
+  margin: 0 0 0.4rem;
+  font-size: 1.125rem;
+}
+.theme h3 a {
+  color: var(--text);
+  text-decoration: none;
+}
+.theme h3 a:hover { color: var(--accent); }
+
+.theme p { margin: 0 0 0.4rem; }
+
+.theme-tags {
+  font-size: var(--fs-small);
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* News / recent */
+.news-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.news-list li {
+  display: grid;
+  grid-template-columns: 5.5rem 1fr;
+  gap: 1rem;
+  padding: 0.5rem 0;
+  align-items: baseline;
+}
+
+.news-list time {
+  color: var(--text-muted);
+  font-size: var(--fs-small);
+  font-variant-numeric: oldstyle-nums;
+  white-space: nowrap;
+}
+
+.news-list a {
+  color: var(--text);
+  text-decoration: underline;
+  text-decoration-color: color-mix(in oklab, var(--accent) 40%, transparent);
+}
+.news-list a:hover { color: var(--accent); text-decoration-color: var(--accent); }
+
+@media (max-width: 480px) {
+  .news-list li { grid-template-columns: 1fr; gap: 0.1rem; }
+}

@@ -1,0 +1,291 @@
+---
+// A small, dependency-free SEIR simulator.
+// Controls are separated from prose; the chart is a hand-rolled SVG.
+---
+
+<figure class="seir" data-seir>
+  <div class="seir-controls">
+    <label>
+      <span>R<sub>0</sub></span>
+      <input type="range" min="0.5" max="5" step="0.1" value="2.5" data-param="R0" />
+      <output data-display="R0">2.5</output>
+    </label>
+
+    <label>
+      <span>Latent period <small>(days)</small></span>
+      <input type="range" min="1" max="14" step="1" value="5" data-param="latent" />
+      <output data-display="latent">5</output>
+    </label>
+
+    <label>
+      <span>Infectious period <small>(days)</small></span>
+      <input type="range" min="1" max="21" step="1" value="7" data-param="infectious" />
+      <output data-display="infectious">7</output>
+    </label>
+
+    <label>
+      <span>Population</span>
+      <input type="number" min="100" max="1000000" step="100" value="1000" data-param="N" />
+    </label>
+
+    <label>
+      <span>Initial exposed</span>
+      <input type="number" min="1" max="1000" step="1" value="5" data-param="E0" />
+    </label>
+  </div>
+
+  <div class="seir-chart-wrap">
+    <svg class="seir-chart" viewBox="0 0 640 300" role="img" aria-label="SEIR curves over time">
+      <g data-axes></g>
+      <g data-paths></g>
+    </svg>
+
+    <div class="seir-legend">
+      <span><i style="background:var(--seir-s)"></i>Susceptible</span>
+      <span><i style="background:var(--seir-e)"></i>Exposed</span>
+      <span><i style="background:var(--seir-i)"></i>Infectious</span>
+      <span><i style="background:var(--seir-r)"></i>Recovered</span>
+    </div>
+
+    <p class="seir-summary" data-summary></p>
+  </div>
+
+  <figcaption>
+    An SEIR model with R<sub>0</sub> as the headline dial. β is derived from R<sub>0</sub>
+    and the infectious period. Drag any slider to rerun.
+  </figcaption>
+</figure>
+
+<style>
+  .seir {
+    --seir-s: #9aa39a;
+    --seir-e: #d9a46a;
+    --seir-i: var(--accent);
+    --seir-r: #6c8f77;
+
+    margin: 2rem 0;
+    padding: 1.5rem;
+    border: 1px solid var(--border);
+    background: color-mix(in oklab, var(--surface) 60%, transparent);
+    border-radius: 2px;
+  }
+
+  .seir-controls {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 0.9rem 1.25rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .seir-controls label {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 0.25rem 0.75rem;
+    font-size: var(--fs-small);
+    color: var(--text-muted);
+  }
+
+  .seir-controls label span {
+    grid-column: 1 / -1;
+    font-style: italic;
+  }
+  .seir-controls label span small { font-style: normal; opacity: 0.7; }
+
+  .seir-controls input[type="range"] {
+    width: 100%;
+    accent-color: var(--accent);
+  }
+
+  .seir-controls input[type="number"] {
+    font-family: inherit;
+    font-size: var(--fs-small);
+    padding: 0.35rem 0.5rem;
+    background: var(--bg);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    width: 100%;
+  }
+  .seir-controls input[type="number"]:focus { outline: 1px solid var(--accent); }
+
+  .seir-controls output {
+    font-variant-numeric: tabular-nums;
+    color: var(--text);
+    font-size: var(--fs-small);
+    min-width: 2.5em;
+    text-align: right;
+  }
+
+  .seir-chart {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .seir-chart .axis { stroke: var(--border); stroke-width: 1; }
+  .seir-chart .axis-label {
+    fill: var(--text-muted);
+    font-family: var(--font-serif);
+    font-size: 11px;
+    font-style: italic;
+  }
+
+  .seir-chart path.curve {
+    fill: none;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .seir-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1.25rem;
+    margin-top: 0.75rem;
+    font-size: var(--fs-small);
+    color: var(--text-muted);
+  }
+  .seir-legend i {
+    display: inline-block;
+    width: 0.75em;
+    height: 0.75em;
+    border-radius: 50%;
+    margin-right: 0.35em;
+    vertical-align: -0.05em;
+  }
+
+  .seir-summary {
+    margin: 1rem 0 0;
+    font-size: var(--fs-small);
+    color: var(--text-muted);
+    font-style: italic;
+  }
+
+  figure.seir > figcaption {
+    margin-top: 1rem;
+    font-size: var(--fs-small);
+    color: var(--text-muted);
+    font-style: italic;
+  }
+</style>
+
+<script>
+  // Vanilla JS. One simulator per figure on the page.
+  type Params = { R0: number; latent: number; infectious: number; N: number; E0: number };
+
+  function simulate({ R0, latent, infectious, N, E0 }: Params) {
+    const sigma = 1 / latent;
+    const gamma = 1 / infectious;
+    const beta = (R0 * gamma);
+
+    const dt = 0.25;
+    const days = 180;
+    const steps = Math.ceil(days / dt);
+
+    let S = N - E0, E = E0, I = 0, R = 0;
+    const t: number[] = [], s: number[] = [], e: number[] = [], i: number[] = [], r: number[] = [];
+
+    let peakI = 0, peakT = 0;
+
+    for (let k = 0; k <= steps; k++) {
+      if (k % Math.round(1 / dt) === 0) {
+        const time = k * dt;
+        t.push(time); s.push(S); e.push(E); i.push(I); r.push(R);
+        if (I > peakI) { peakI = I; peakT = time; }
+      }
+      const dS = -beta * S * I / N;
+      const dE =  beta * S * I / N - sigma * E;
+      const dI =  sigma * E - gamma * I;
+      const dR =  gamma * I;
+      S += dS * dt; E += dE * dt; I += dI * dt; R += dR * dt;
+    }
+
+    return { t, S: s, E: e, I: i, R: r, peakI, peakT, finalR: R };
+  }
+
+  function linePath(xs: number[], ys: number[], x0: number, y0: number, w: number, h: number, yMax: number, tMax: number) {
+    let d = "";
+    for (let k = 0; k < xs.length; k++) {
+      const x = x0 + (xs[k] / tMax) * w;
+      const y = y0 + h - (ys[k] / yMax) * h;
+      d += (k === 0 ? "M" : "L") + x.toFixed(1) + "," + y.toFixed(1) + " ";
+    }
+    return d.trim();
+  }
+
+  function render(fig: HTMLElement) {
+    const params: Params = {
+      R0:         Number((fig.querySelector('[data-param="R0"]') as HTMLInputElement).value),
+      latent:     Number((fig.querySelector('[data-param="latent"]') as HTMLInputElement).value),
+      infectious: Number((fig.querySelector('[data-param="infectious"]') as HTMLInputElement).value),
+      N:          Number((fig.querySelector('[data-param="N"]') as HTMLInputElement).value),
+      E0:         Number((fig.querySelector('[data-param="E0"]') as HTMLInputElement).value),
+    };
+
+    // Update output readouts
+    fig.querySelectorAll('[data-display]').forEach(el => {
+      const key = (el as HTMLElement).dataset.display!;
+      const input = fig.querySelector(`[data-param="${key}"]`) as HTMLInputElement | null;
+      if (input) el.textContent = input.value;
+    });
+
+    const sim = simulate(params);
+
+    // Chart layout
+    const W = 640, H = 300, pad = { l: 44, r: 12, t: 12, b: 28 };
+    const innerW = W - pad.l - pad.r;
+    const innerH = H - pad.t - pad.b;
+    const tMax = sim.t[sim.t.length - 1];
+    const yMax = params.N;
+
+    const axes = fig.querySelector('[data-axes]') as SVGGElement;
+    const paths = fig.querySelector('[data-paths]') as SVGGElement;
+    axes.innerHTML = '';
+    paths.innerHTML = '';
+
+    // Axes
+    axes.innerHTML += `<line class="axis" x1="${pad.l}" y1="${pad.t + innerH}" x2="${pad.l + innerW}" y2="${pad.t + innerH}" />`;
+    axes.innerHTML += `<line class="axis" x1="${pad.l}" y1="${pad.t}" x2="${pad.l}" y2="${pad.t + innerH}" />`;
+
+    // Y ticks (0, 50%, 100%)
+    for (const frac of [0, 0.5, 1]) {
+      const y = pad.t + innerH - frac * innerH;
+      axes.innerHTML += `<line class="axis" x1="${pad.l - 4}" y1="${y}" x2="${pad.l}" y2="${y}" />`;
+      const label = Math.round(frac * params.N).toLocaleString();
+      axes.innerHTML += `<text class="axis-label" x="${pad.l - 8}" y="${y + 4}" text-anchor="end">${label}</text>`;
+    }
+    // X ticks (every 30 days)
+    for (let d = 0; d <= 180; d += 30) {
+      const x = pad.l + (d / tMax) * innerW;
+      axes.innerHTML += `<line class="axis" x1="${x}" y1="${pad.t + innerH}" x2="${x}" y2="${pad.t + innerH + 4}" />`;
+      axes.innerHTML += `<text class="axis-label" x="${x}" y="${pad.t + innerH + 18}" text-anchor="middle">${d}d</text>`;
+    }
+
+    const series: [number[], string][] = [
+      [sim.S, 'var(--seir-s)'],
+      [sim.E, 'var(--seir-e)'],
+      [sim.I, 'var(--seir-i)'],
+      [sim.R, 'var(--seir-r)'],
+    ];
+    for (const [ys, stroke] of series) {
+      const d = linePath(sim.t, ys, pad.l, pad.t, innerW, innerH, yMax, tMax);
+      paths.innerHTML += `<path class="curve" d="${d}" stroke="${stroke}" />`;
+    }
+
+    // Summary
+    const peakPct = ((sim.peakI / params.N) * 100).toFixed(1);
+    const attack = ((sim.finalR / params.N) * 100).toFixed(1);
+    const summary = fig.querySelector('[data-summary]') as HTMLElement;
+    summary.textContent =
+      `Peak ${Math.round(sim.peakI).toLocaleString()} infectious (${peakPct}% of N) around day ${Math.round(sim.peakT)}. ` +
+      `Final attack rate ${attack}%.`;
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-seir]').forEach(fig => {
+    render(fig);
+    fig.querySelectorAll('input').forEach(input => {
+      input.addEventListener('input', () => render(fig));
+    });
+  });
+</script>

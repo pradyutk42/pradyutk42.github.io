@@ -1,0 +1,41 @@
+---
+// Layout for plain-prose blog posts written in Markdown.
+// In a .md file, set frontmatter like:
+//
+//   ---
+//   layout: ../../layouts/BlogPost.astro
+//   title: "Post title"
+//   date: 2026-04-12
+//   readingTime: "5 min"
+//   ---
+//
+// Then write Markdown below. The route is created automatically from the filename.
+import BaseLayout from "./BaseLayout.astro";
+
+const { frontmatter } = Astro.props;
+const dateStr = frontmatter?.date
+  ? new Date(frontmatter.date).toLocaleDateString("en-US", {
+      year: "numeric", month: "long", day: "numeric",
+    })
+  : null;
+---
+
+<BaseLayout current="blog" title={`${frontmatter.title} · Pradyut Kumar`}>
+  <article>
+    <h1>{frontmatter.title}</h1>
+
+    {(dateStr || frontmatter.readingTime) && (
+      <p class="article-meta">
+        {dateStr && <time datetime={String(frontmatter.date)}>{dateStr}</time>}
+        {dateStr && frontmatter.readingTime && " · "}
+        {frontmatter.readingTime}
+      </p>
+    )}
+
+    <slot />
+
+    <p style="margin-top:2.5rem;">
+      <a href="/blog">← back to posts</a>
+    </p>
+  </article>
+</BaseLayout>
