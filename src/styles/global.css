@@ -4,17 +4,17 @@
    ============================================================= */
 
 :root {
-  /* palette — light (terracotta on warm cream) */
-  --bg:         #f5f1ea;
-  --surface:    #ece5d7;
-  --text:       #2a2521;
-  --text-muted: #8a807a;
-  --accent:     #b85a42;  /* terracotta — links only */
-  --border:     #dcd4c6;
+  /* palette — light (Graphite: neutral grey, slate-blue accent) */
+  --bg:         #f2f2ef;
+  --surface:    #e4e4e0;
+  --text:       #1f2023;
+  --text-muted: #6c6e72;
+  --accent:     #47536a;  /* slate — links only */
+  --border:     #d8d8d3;
 
   /* typography */
-  --font-serif: "Newsreader", "Source Serif 4", "Iowan Old Style",
-                "Apple Garamond", Georgia, "Times New Roman", serif;
+  --font-sans:  "Public Sans", "Inter", -apple-system, "Segoe UI",
+                Helvetica, Arial, sans-serif;
   --font-mono:  ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 
   /* scale */
@@ -32,27 +32,39 @@
 
   /* motion */
   --ease: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ambient cover-art background (see .site-texture below) */
+  --art-blend:   multiply;
+  --art-opacity: 0.14;
+  --art-filter:  none;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg:         #1c1915;
-    --surface:    #262220;
-    --text:       #e8e1d5;
-    --text-muted: #938a80;
-    --accent:     #d27a63;
-    --border:     #332e28;
+    --bg:         #17181a;
+    --surface:    #202124;
+    --text:       #e7e7e5;
+    --text-muted: #96979a;
+    --accent:     #93a7bc;
+    --border:     #2d2e31;
+
+    --art-blend:   screen;
+    --art-opacity: 0.22;
+    --art-filter:  invert(1) saturate(0.5) brightness(1.05);
   }
 }
 
 /* Allow an explicit theme override via <html data-theme="light|dark">. */
 html[data-theme="light"] {
-  --bg: #f5f1ea; --surface: #ece5d7; --text: #2a2521;
-  --text-muted: #8a807a; --accent: #b85a42; --border: #dcd4c6;
+  --bg: #f2f2ef; --surface: #e4e4e0; --text: #1f2023;
+  --text-muted: #6c6e72; --accent: #47536a; --border: #d8d8d3;
+  --art-blend: multiply; --art-opacity: 0.14; --art-filter: none;
 }
 html[data-theme="dark"] {
-  --bg: #1c1915; --surface: #262220; --text: #e8e1d5;
-  --text-muted: #938a80; --accent: #d27a63; --border: #332e28;
+  --bg: #17181a; --surface: #202124; --text: #e7e7e5;
+  --text-muted: #96979a; --accent: #93a7bc; --border: #2d2e31;
+  --art-blend: screen; --art-opacity: 0.22;
+  --art-filter: invert(1) saturate(0.5) brightness(1.05);
 }
 
 /* =============================================================
@@ -68,18 +80,70 @@ html {
 }
 
 body {
+  position: relative;
   margin: 0;
   background: var(--bg);
   color: var(--text);
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-size: var(--fs-base);
   line-height: var(--lh-body);
-  font-feature-settings: "kern", "liga", "onum";  /* old-style numerals */
-  font-variant-numeric: oldstyle-nums;
+  font-feature-settings: "kern", "liga";
   transition: background-color 200ms var(--ease), color 200ms var(--ease);
 }
 
 img, svg { max-width: 100%; height: auto; display: block; }
+
+/* =============================================================
+   Ambient background
+   The homepage cover-art diagram, placed once (no tiling) as a
+   static watermark behind the hero/research column. No scroll-
+   linked motion -- that read as busy/unprofessional in practice.
+   Subtlety comes from low opacity + blend mode, not blur, so every
+   node/shape/flight path in the diagram stays legible up close.
+   ============================================================= */
+
+.site-texture {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.tex-art {
+  position: absolute;
+  inset: 0;
+  background-image: url("/cover-network.png");
+  background-repeat: no-repeat;
+  background-size: 760px auto;
+  background-position: 50% 220px;
+  mix-blend-mode: var(--art-blend);
+  opacity: var(--art-opacity);
+  filter: var(--art-filter);
+  transition: opacity 200ms var(--ease);
+}
+
+/* A quiet wash parked at the very top of the page — not tied to
+   scroll position at all, it never moves, it is simply there
+   behind the hero for a little warmth. */
+.tex-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 640px;
+  background: radial-gradient(
+    ellipse 60% 55% at 50% 0%,
+    color-mix(in oklab, var(--accent) 14%, transparent),
+    transparent 72%
+  );
+}
+
+@media (max-width: 720px) {
+  .tex-art { background-size: 420px auto; background-position: 50% 140px; }
+  .tex-glow { height: 440px; }
+}
+
 
 /* =============================================================
    Layout
@@ -93,6 +157,8 @@ img, svg { max-width: 100%; height: auto; display: block; }
 }
 
 .page {
+  position: relative;
+  z-index: 1;
   padding-top: 3rem;
   padding-bottom: 6rem;
   min-height: calc(100vh - 8rem);
@@ -104,7 +170,7 @@ img, svg { max-width: 100%; height: auto; display: block; }
    ============================================================= */
 
 h1, h2, h3, h4 {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-weight: 600;
   line-height: var(--lh-tight);
   letter-spacing: -0.01em;
@@ -170,6 +236,8 @@ pre code { background: transparent; padding: 0; }
    ============================================================= */
 
 .site-header {
+  position: relative;
+  z-index: 1;
   padding: 2rem var(--gutter) 0;
 }
 
@@ -180,8 +248,10 @@ pre code { background: transparent; padding: 0; }
   justify-content: center;
   align-items: baseline;
   gap: 1.75rem;
-  font-style: italic;
-  font-size: 1rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
   color: var(--text-muted);
 }
 
@@ -201,9 +271,11 @@ pre code { background: transparent; padding: 0; }
   border: 0;
   padding: 0.25rem 0.5rem;
   color: var(--text-muted);
-  font-style: italic;
   font-family: inherit;
-  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.75rem;
+  font-weight: 500;
   cursor: pointer;
 }
 .theme-toggle:hover { color: var(--text); }
@@ -213,6 +285,8 @@ pre code { background: transparent; padding: 0; }
    ============================================================= */
 
 .site-footer {
+  position: relative;
+  z-index: 1;
   max-width: var(--measure);
   margin: 4rem auto 2rem;
   padding: 1.5rem var(--gutter) 0;
@@ -249,7 +323,8 @@ pre code { background: transparent; padding: 0; }
   justify-content: center;
   color: var(--text-muted);
   font-size: var(--fs-small);
-  font-style: italic;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
   overflow: hidden;
 }
 
@@ -265,7 +340,7 @@ pre code { background: transparent; padding: 0; }
   letter-spacing: -0.02em;
   line-height: 1.1;
   margin: 0.3em 0 0.1em;
-  color: var(--accent);  /* the ONE place terracotta is used on a heading */
+  color: var(--accent);  /* the ONE place the accent is used on a heading */
 }
 
 .hero-kicker {
@@ -351,13 +426,15 @@ pre code { background: transparent; padding: 0; }
   margin-top: 0.5rem;
   font-size: var(--fs-small);
   color: var(--text-muted);
-  font-style: italic;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
 }
 
 .project-status {
   font-size: var(--fs-small);
-  font-weight: 400;
-  font-style: italic;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
   color: var(--text-muted);
   margin-left: 0.6rem;
   vertical-align: middle;
@@ -383,16 +460,16 @@ pre code { background: transparent; padding: 0; }
 
 .section-head h2 {
   margin: 0;
-  font-size: 1.05rem;
+  font-size: 0.85rem;
   font-weight: 600;
-  font-style: italic;
-  letter-spacing: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
   color: var(--text-muted);
 }
 
 .section-link {
   font-size: var(--fs-small);
-  font-style: italic;
+  font-weight: 500;
   color: var(--text-muted);
   text-decoration: none;
   white-space: nowrap;
@@ -427,7 +504,8 @@ pre code { background: transparent; padding: 0; }
 .theme-tags {
   font-size: var(--fs-small);
   color: var(--text-muted);
-  font-style: italic;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
 }
 
 /* News / recent */
